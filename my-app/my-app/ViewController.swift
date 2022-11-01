@@ -23,29 +23,43 @@ class ViewController: UIViewController {
 
 //        let url = URL(string: "https://bit.ly/2LMtByx")!
 
-        let url = URL(string: "https://bit.ly/2LMtByx")!
+        let url = URL(string: "https://v2.jokeapi.dev/joke/Any")!
 
         let task = URLSession.shared.dataTask(with: url) { data, response, error in
-            if let data = data {
-                let image = UIImage(data: data)
-            } else if let error = error {
-                print("HTTP Request Failed \(error)")
+//            print(response!)
+            do {
+                let json = try JSONSerialization.jsonObject(with: data!) as! Dictionary<String, Any>
+//                print(json)
+                
+                
+                if(json["setup"] != nil){
+                    print((json["setup"]))
+                    greetlabel.text = String(json["setup"]) 
+                }else if(json["joke"] != nil){
+                    print(json["joke"])
+                    greetlabel.text = String(describing: json["joke"] ?? "")
+                }
+//                let ci = json[String(0)] ?? 0
+//                print(ci)
+         
+            } catch {
+                print("error")
             }
         }
 
         task.resume()
         
         
-        if(textField.text!.count>0){
-            greetlabel.textColor = UIColor.black
-            greetlabel.text = "hello \(textField.text!)"
-            //            print(textField.text)
-            
-            textField.text = ""
-        }else{
-            greetlabel.textColor = UIColor.red
-            greetlabel.text = "empty text"
-        }
+//        if(textField.text!.count>0){
+//            greetlabel.textColor = UIColor.black
+//            greetlabel.text = "hello \(textField.text!)"
+//            //            print(textField.text)
+//
+//            textField.text = ""
+//        }else{
+//            greetlabel.textColor = UIColor.red
+//            greetlabel.text = "empty text"
+//        }
 
     }
     
